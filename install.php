@@ -102,7 +102,7 @@ if( ! isset($_POST['action'])
 
 	<p>Your server should meet all the necessary requirements.</p>
 
-	<form method="POST" action="<?= $self ?>">
+	<form id="install_form" method="POST" action="<?= $self ?>">
 
 		<fieldset>
 			<legend>Settings</legend>
@@ -134,7 +134,19 @@ if( ! isset($_POST['action'])
 
 		<input type="hidden" name="action" value="install">
 		<button>start installation</button>
+
 	</form>
+
+	<script>
+	(function(){
+		var form = document.getElementById('install_form');
+		form.addEventListener('submit', function(e){
+			var button = form.querySelector('button');
+			button.disabled = true;
+		});
+	})();
+	</script>
+
 	<?php
 
 } else {
@@ -143,40 +155,70 @@ if( ! isset($_POST['action'])
 
 	foreach( $sources as $source => $source_info ) {
 
-		echo '<h3>installing '.$source.'</h3>';
+		flush();
 
+		echo '<h3>Installing '.$source.'</h3>';
 
 		$target_folder = $abspath.$source_info['target'];
 
 		install_module( $source, $target_folder );
 
+		flush();
 
 		$config = [];
 		if( ! empty($_POST[$source]) ) {
 			$config = $_POST[$source];
 		}
 
-		if( $source == 'postamt' || $source == 'sekretaer' ) {
-			$config['allowed_urls'] = $baseurl;
-		}
-
-		if( $source == 'postamt' ) {
+		// automatically set some additional options:
+		$config['setup'] = true;
+		if( $source == 'eigenheim') {
+			$config['baseurl_overwrite'] = $baseurl;
+			$config['basefolder_overwrite'] = $basefolder;
+			$config['microsub'] = $baseurl.'postamt/';
+		} elseif( $source == 'sekretaer' ) {
+			$config['authorized_urls'] = $baseurl;
+			$config['start'] = true;
+		} elseif( $source == 'postamt' ) {
+			$config['authorized_urls'] = $baseurl;
 			$config['refresh_on_connect'] = true;
 		}
 
+
 		// call setup of this module to create the config
-		$setup_url = $baseurl.$source_info['target'].'index.php?setup';
+		$setup_url = $baseurl.$source_info['target'].'index.php';
+
+		echo '<p>updating confing … ';
+		flush();
+
 		post_request( $setup_url, $config );
+
+		echo 'done.</p>';
 
 	}
 
+	flush();
+
+	$content = "<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$basefolder."\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule (.*) eigenheim/$1 [L,QSA]\r\nRewriteRule ^$ eigenheim/ [L,QSA]\r\n\r\n</IfModule>";
+	file_put_contents( $abspath.'.htaccess', $content );
+
+	$cookie_lifetime = 60*60*24*10; // 10 days, in seconds
+	setcookie( 'sekretaer-url', $baseurl, array(
+		'expires' => time()+$cookie_lifetime,
+		'path' => '/'
+	));
+
+	echo '<h3>cleaning up</h3>';
+	flush();
+
 	delete_directory($temp_folder);
 
-	// TODO: add .htaccess to redirect all requests to eigenheim (bar postamt & sekretaer)
-
 	// TODO: add update.php ?
-
 	// TODO: delete install.php if everything went fine
+
+	echo '<p>all done. please <a href="'.$baseurl.'">refresh this page</a></p>';
+
+	flush();
 
 }
 
@@ -286,7 +328,15 @@ function install_module( $source, $target ) {
 		exit;
 	}
 
+	echo '<p>Moving files to new location … ';
+
+	flush();
+
 	move_folder_to( $subfolder, $target );
+
+	echo 'done.</p>';
+
+	flush();
 
 }
 
