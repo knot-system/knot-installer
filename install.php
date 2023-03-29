@@ -7,7 +7,7 @@ $php_min_version_major = 8;
 $sources = [
 	'eigenheim' => [
 		'zipball' => 'https://api.github.com/repos/maxhaesslein/eigenheim/releases',
-		'target' => '',
+		'target' => 'eigenheim/',
 	],
 	'sekretaer' => [
 		'zipball' => 'https://api.github.com/repos/maxhaesslein/sekretaer/releases',
@@ -164,19 +164,15 @@ if( ! isset($_POST['action'])
 			$config['refresh_on_connect'] = true;
 		}
 
-		echo '<pre>';
-		var_dump($config);
-		echo '</pre>';
-
-		// TODO: create config.php
-		// TODO: maybe call setup.php?
+		// call setup of this module to create the config
+		$setup_url = $baseurl.$source_info['target'].'index.php?setup';
+		post_request( $setup_url, $config );
 
 	}
 
-
-
 	delete_directory($temp_folder);
 
+	// TODO: add .htaccess to redirect all requests to eigenheim (bar postamt & sekretaer)
 
 	// TODO: add update.php ?
 
@@ -189,6 +185,29 @@ if( ! isset($_POST['action'])
 </body>
 </html>
 <?php
+
+
+function post_request( $url, $post_data = array() ){
+	global $useragent;
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+	curl_setopt( $ch, CURLOPT_HEADER, true );
+	curl_setopt( $ch, CURLOPT_USERAGENT, $useragent );
+	curl_setopt( $ch, CURLOPT_POST, 1 );
+	if( count($post_data) ) {
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_data );
+	}
+
+	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+	curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+
+	$response = curl_exec( $ch );
+
+	curl_close( $ch );
+
+	return $response;
+}
 
 
 function install_module( $source, $target ) {
