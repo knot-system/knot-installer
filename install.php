@@ -26,7 +26,7 @@ $useragent = 'maxhaesslein/homestead/'.$installer_version;
 $local_phpversion = explode( '.', phpversion() );
 
 if( $local_phpversion[0] < $php_min_version_major ) {
-	echo 'PHP version is too old (you need at least PHP '.$php_min_version_major.')';
+	echo '<strong>Error:</strong> your PHP version is too old (you need at least PHP '.$php_min_version_major.')';
 	exit;
 }
 
@@ -102,50 +102,32 @@ if( ! isset($_POST['action'])
 
 	<p>The installation should be very quick, and your server should meet all the necessary requirements.</p>
 
-	<hr>
-
-	<h2>Settings</h2>
-
-	<p>You need to provide some information before we can begin the installation. Please fill out all fields:</p>
-
 	<form method="POST" action="<?= $self ?>">
+
+		<fieldset>
+			<legend>Settings</legend>
+	
+			<p>You need to provide some information before we can begin the installation:</p>
+
+			<p><label><strong>Site Title</strong><br><input type="text" name="eigenheim[site_title]" required><br><small>(the title of your website)</small></label></p>
+			<p><label><strong>Author Name</strong><br><input type="text" name="eigenheim[author_name]" required><br><small>(your name, displayed on your website)</small></label></p>
+			<p><label><strong>Authorization Mail</strong><br><input type="email" name="eigenheim[auth_mail]" required><br><small>(your email address; this is were we send the login token to, when you log into a micropub client. It is not displayed publicly, but is added to the HTML source code. This option will be removed later, when we have our own authorization module)</small></label></p>
+			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked>create test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
+
+			<p><label><input type="checkbox" name="postamt[refresh_on_connect]" value="true" checked> refresh on connect<br><small>(this makes getting the posts slower, but you don't need to set up a cronjob; you can change this later via <code>postamt/config.php</code>)</small></label>
+
+		</fieldset>
 
 
 		<fieldset class="unimportant">
 
 			<legend>Environment Variables</legend>
+			<p>if something goes wrong, this helps to debug the issue:</p>
 			<ul>
 				<li>ABSPATH: <em><?= $abspath ?></em></li>
 				<li>BASEFOLDER: <em><?= $basefolder ?></em></li>
 				<li>BASEURL: <em><?= $baseurl ?></em></li>
 			</ul>
-
-		</fieldset>
-
-
-		<fieldset>
-			<legend>Eigenheim Settings</legend>
-
-			<p><label><strong>Site Title</strong><br><input type="text" name="eigenheim[site_title]" required></label></p>
-			<p><label><strong>Authorization Mail</strong><br><input type="email" name="eigenheim[auth_mail]" required><br><small>(this is were we send the login token to, when you log into a micropub client. It is not displayed publicly, but is added to the HTML source code)</small></label></p>
-			<p><label><strong>Author Name</strong><br><input type="text" name="eigenheim[author_name]" required></label></p>
-			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked>create test content <small>(optional)</small></label>
-
-		</fieldset>
-
-
-		<fieldset class="unimportant">
-			<legend>Sekretär Settings</legend>
-
-			<p><small>currently no settings needed</small></p>
-
-		</fieldset>
-
-
-		<fieldset>
-			<legend>Postamt Settings</legend>
-
-			<p><label><input type="checkbox" name="postamt[refresh_on_connect]" value="true" checked> <strong>refresh on connect</strong><br><small>(this makes getting the posts slower, but you don't need to set up a cronjob; you can change this later via the config.php)</small></label>
 
 		</fieldset>
 
@@ -292,6 +274,7 @@ function move_folder_to( $source, $target ){
     }
     rename( $source, $target );
 }
+
 
 function get_remote_json( $url ) {
 
