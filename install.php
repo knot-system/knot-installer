@@ -43,7 +43,10 @@ $baseurl .= $_SERVER['HTTP_HOST'];
 $baseurl .= $basefolder;
 
 
-// TODO: check if this is already installed
+if( is_dir($abspath.'eigenheim/') || is_dir($abspath.'postamt/') || is_dir($abspath.'sekretaer/') ) {
+	echo '<strong>Error:</strong> it looks like homestead is already installed at this location!';
+	exit;
+}
 
 
 $temp_folder = $abspath.'tmp/';
@@ -213,8 +216,7 @@ if( ! isset($_POST['action'])
 
 	delete_directory($temp_folder);
 
-	// TODO: add update.php ?
-	// TODO: delete install.php if everything went fine
+	unlink( $abspath.'install.php' );
 
 	echo '<p>all done. please <a href="'.$baseurl.'">refresh this page</a></p>';
 
