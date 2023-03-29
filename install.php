@@ -59,7 +59,7 @@ if( ! is_dir($temp_folder) ) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>Homestead Installer</title>
+	<title>🏡 Homestead Installer</title>
 
 	<style>
 		fieldset {
@@ -91,30 +91,28 @@ if( ! isset($_POST['action'])
 ) {
 	?>
 
-	<h1>Homestead</h1>
+	<h1>🏡 Homestead Installer</h1>
 
 	<p>This script will install all modules required for a full <strong>Homestead</strong> installation. These modules are:</p>
 	<ul>
 		<li><strong>Eigenheim</strong> as the website (and micropub server), that visitors will see</li>
 		<li><strong>Sekretär</strong> as the micropub & microsub client, where you can write new posts and read posts from websites you follow</li>
-		<li><strong>Postamt</strong> as the microsub server, that will manage the websites you follow and collect their posts</li>
+		<li><strong>Postamt</strong> as the microsub server, that will manage the websites you follow and collect new posts they publish</li>
 	</ul>
 
-	<p>The installation should be very quick, and your server should meet all the necessary requirements.</p>
+	<p>Your server should meet all the necessary requirements.</p>
 
 	<form method="POST" action="<?= $self ?>">
 
 		<fieldset>
 			<legend>Settings</legend>
 	
-			<p>You need to provide some information before we can begin the installation:</p>
+			<p>You need to provide some basic information before we can begin the installation:</p>
 
 			<p><label><strong>Site Title</strong><br><input type="text" name="eigenheim[site_title]" required><br><small>(the title of your website)</small></label></p>
 			<p><label><strong>Author Name</strong><br><input type="text" name="eigenheim[author_name]" required><br><small>(your name, displayed on your website)</small></label></p>
-			<p><label><strong>Authorization Mail</strong><br><input type="email" name="eigenheim[auth_mail]" required><br><small>(your email address; this is were we send the login token to, when you log into a micropub client. It is not displayed publicly, but is added to the HTML source code. This option will be removed later, when we have our own authorization module)</small></label></p>
-			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked>create test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
-
-			<p><label><input type="checkbox" name="postamt[refresh_on_connect]" value="true" checked> refresh on connect<br><small>(this makes getting the posts slower, but you don't need to set up a cronjob; you can change this later via <code>postamt/config.php</code>)</small></label>
+			<p><label><strong>Authorization Mail</strong><br><input type="email" name="eigenheim[auth_mail]" required><br><small>(your email address; this is were we send the login token to, when you log into the Sekretär backend. It is not displayed publicly, but is added to the Eigenheim HTML source code. This option will be removed later, when we have our own authorization module)</small></label></p>
+			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked> create Eigenheim test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
 
 		</fieldset>
 
@@ -132,7 +130,7 @@ if( ! isset($_POST['action'])
 		</fieldset>
 
 
-		<p><strong>This is an early beta version!</strong> Some things may break!</p>
+		<p><strong>This is an early beta version!</strong> Some things may break, or change in the future!</p>
 
 		<input type="hidden" name="action" value="install">
 		<button>start installation</button>
@@ -162,6 +160,10 @@ if( ! isset($_POST['action'])
 			$config['allowed_urls'] = $baseurl;
 		}
 
+		if( $source == 'postamt' ) {
+			$config['refresh_on_connect'] = true;
+		}
+
 		echo '<pre>';
 		var_dump($config);
 		echo '</pre>';
@@ -175,6 +177,8 @@ if( ! isset($_POST['action'])
 
 	delete_directory($temp_folder);
 
+
+	// TODO: add update.php ?
 
 	// TODO: delete install.php if everything went fine
 
