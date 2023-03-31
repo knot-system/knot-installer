@@ -135,6 +135,8 @@ if( ! isset($_POST['action'])
 
 		<p><strong>This is an early beta version!</strong> Some things may break, or change in the future!</p>
 
+		<p>Your website will be installed at <strong><?= $baseurl ?></strong>. Please make sure that this is correct.</p>
+
 		<input type="hidden" name="action" value="install">
 		<button>start installation</button>
 
