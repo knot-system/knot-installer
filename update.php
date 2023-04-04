@@ -73,15 +73,18 @@ if( ! $eigenheim && ! $postamt && ! $sekretaer ) {
 		border: 0;
 		border-top: 1px solid;
 	}
-	iframe {
+	code.response {
 		border: 1px solid grey;
 		padding: 10px;
 		display: block;
-		width: 100%;
-		height: 500px;
 		pointer-events: none;
 		opacity: 0.5;
 	}
+		code.response a {
+			text-decoration: none;
+			color: inherit;
+			pointer-events: none;
+		}
 	</style>
 </head>
 <body>
@@ -119,15 +122,15 @@ if( ! $update_allowed ) {
 	flush();
 
 	if( $eigenheim && in_array('eigenheim', $modules) ) {
-		do_update( 'eigenheim', $version );
+		do_update( 'Eigenheim', 'eigenheim', $version );
 	}
 
 	if( $sekretaer && in_array('sekretaer', $modules) ) {
-		do_update( 'sekretaer', $version );
+		do_update( 'Sekretär', 'sekretaer', $version );
 	}
 
 	if( $postamt && in_array('postamt', $modules) ) {
-		do_update( 'postamt', $version );
+		do_update( 'Postamt', 'postamt', $version );
 	}
 
 	echo '<p>Cleaning up …</p>';
@@ -136,11 +139,11 @@ if( ! $update_allowed ) {
 	@unlink($abspath.'update.txt');
 	@unlink($abspath.'update');
 
-	echo '<p>All done. <a href="'.$baseurl.'">Refresh this page</a></p>';
+	echo '<p>All done.</p>';
 
 } else {
 	?>
-	<p>This script will update all modules. These modules are currently installed:</p>
+	<p>This script will update the selected modules. These modules are currently installed:</p>
 
 	<form method="GET" action="<?= $baseurl ?>update.php">
 		<input type="hidden" name="action" value="install">
@@ -157,7 +160,7 @@ if( ! $update_allowed ) {
 			<option value="latest" selected>latest stable release</option>
 			<option value="dev">unstable dev release (not recommended)</option>
 		</select></label></p>
-		<p><button>update all modules</button></p>
+		<p><button>update selected modules</button></p>
 
 	</form>
 	<?php
@@ -168,30 +171,39 @@ if( ! $update_allowed ) {
 </html><?php
 
 
-function do_update( $module, $version = 'latest' ) {
+function do_update( $name, $module, $version = 'latest' ) {
 
 	global $homestead_abspath, $homestead_baseurl;
 
-	$abspath = $homestead_abspath.$module.'/';
-
-	$name = ucwords($module);
-	if( $name == 'Sekretaer' ) $name = 'Sekretär';
-
 	echo '<p>Updating '.$name.' …</p>';
 	flush();
+
+	$abspath = $homestead_abspath.$module.'/';
+	$baseurl = $homestead_baseurl.$module.'/';
 
 	touch( $abspath.'update' );
 
 	time_nanosleep(0,500000000); // sleep for 0.5 seconds
 
+	$response = get_request( $baseurl.'?update=true&step=install&version='.$version );
+
 	?>
-	<iframe src="<?= $homestead_baseurl.$module.'/?update=true&step=install&version='.$version ?>">
-	</iframe>
+	<code class="response">
+		<?php echo strip_tags( $response, ['br','p','ul','ol','li'] ); ?>
+	</code>
 	<?php
+	flush();
+
+	time_nanosleep(0,500000000); // sleep for 0.5 seconds
+
+	get_request( $baseurl ); // trigger re-creation of missing files
+
+	flush();
+
 }
 
 
-function homestead_get_remote( $url ) {
+function get_request( $url ) {
 
 	global $useragent;
 
