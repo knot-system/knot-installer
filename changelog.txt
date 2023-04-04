@@ -1,7 +1,7 @@
 v.0.1.1
 
 Updater
-- added basic updater
+- added basic updater (the modules need to be at least at version 0.1.1 for the version-select-dropdown to work)
 
 Installer
 - added instructions about changing the domain
