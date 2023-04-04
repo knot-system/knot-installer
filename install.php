@@ -1,6 +1,6 @@
 <?php
 
-$installer_version = '0.1.0';
+$installer_version = '0.1.1';
 
 $php_min_version_major = 8;
 

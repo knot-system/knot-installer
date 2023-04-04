@@ -14,7 +14,9 @@ You then can open the website at `https://www.example.com`. The Sekretär backen
 
 ## Updating
 
-An update script will follow in the future. For now, you can update each module individually, see the `README.md` inside the `eigenheim/`, `sekretaer/` and `postamt/` folders.
+Create an empty file called `update` (or `update.txt`) in the root folder of your Homestead installation (this makes sure that you have access to the webserver and are allowed to initialize an update). Then open the file `update.php` in the browser (for example, `https://www.example.com/update.php`) and follow the instructions.
+
+If you finish updating, the newly created file `update` (or `update.txt`) will be deleted automatically. If you do not finish updating, delete it manually. 
 
 
 ## Backup
