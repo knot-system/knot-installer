@@ -43,15 +43,6 @@ if( file_exists($abspath.'update') || file_exists($abspath.'update.txt') ) {
 }
 
 
-$temp_folder = $abspath.'tmp/';
-if( ! is_dir($temp_folder) ) {
-	if( mkdir( $temp_folder, 0777, true ) === false ) {
-		echo 'could not create temp folder';
-		exit;
-	}
-}
-
-
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -148,9 +139,13 @@ if( ! $module_found ) {
 			exit;
 		}
 
-		var_dump($zipball);
-		exit;
-
+		$temp_folder = $abspath.'_homestead_temp/';
+		if( ! is_dir($temp_folder) ) {
+			if( mkdir( $temp_folder, 0777, true ) === false ) {
+				echo 'could not create temp folder';
+				exit;
+			}
+		}
 
 		echo '<p>Downloading new .zip from GitHub … ';
 		flush();
@@ -229,6 +224,8 @@ if( ! $module_found ) {
 		echo '<p>Cleaning up …';
 		@unlink( $abspath.'update.txt' );
 		@unlink( $abspath.'update' );
+
+		deleteDirectory( $temp_folder );
 
 		echo 'done.</p>';
 
