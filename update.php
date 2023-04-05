@@ -2,6 +2,21 @@
 
 $updater_version = '0.1.1';
 
+$sources = [
+	'eigenheim' => [
+		'name' => 'Eigenheim',
+		'target' => 'eigenheim/',
+	],
+	'sekretaer' => [
+		'name' => 'Sekretär',
+		'target' => 'sekretaer/',
+	],
+	'postamt' => [
+		'name' => 'Postamt',
+		'target' => 'postamt/',
+	]
+];
+
 $useragent = 'maxhaesslein/homestead/'.$updater_version;
 
 
@@ -24,19 +39,16 @@ $homestead_abspath = $abspath;
 $homestead_baseurl = $baseurl;
 
 
-$eigenheim = false;
-if( is_dir($abspath.'eigenheim/') && file_exists($abspath.'eigenheim/system/version.txt') ) {
-	$eigenheim = trim(file_get_contents($abspath.'eigenheim/system/version.txt'));
-}
+$module_found = false; // at least one module was found
+foreach( $sources as $source => $options ) {
 
-$postamt = false;
-if( is_dir($abspath.'postamt/') && file_exists($abspath.'postamt/system/version.txt') ) {
-	$postamt = trim(file_get_contents($abspath.'postamt/system/version.txt'));
-}
+	$sources[$source]['installed_version'] = false;
+	if( is_dir($abspath.$options['target'].'/') && file_exists($abspath.$options['target'].'/system/version.txt') ) {
+		$sources[$source]['installed_version'] = trim(file_get_contents($abspath.$options['target'].'/system/version.txt'));
 
-$sekretaer = false;
-if( is_dir($abspath.'sekretaer/') && file_exists($abspath.'sekretaer/system/version.txt') ) {
-	$sekretaer = trim(file_get_contents($abspath.'sekretaer/system/version.txt'));
+		$module_found = true;
+	}
+
 }
 
 
@@ -46,7 +58,7 @@ if( file_exists($abspath.'update') || file_exists($abspath.'update.txt') ) {
 }
 
 
-if( ! $eigenheim && ! $postamt && ! $sekretaer ) {
+if( ! $module_found ) {
 	echo '<strong>Error:</strong> it looks like homestead is not installed at this location!';
 	exit;
 }
@@ -121,16 +133,8 @@ if( ! $update_allowed ) {
 	<?php
 	flush();
 
-	if( $eigenheim && in_array('eigenheim', $modules) ) {
-		do_update( 'Eigenheim', 'eigenheim', $version );
-	}
-
-	if( $sekretaer && in_array('sekretaer', $modules) ) {
-		do_update( 'Sekretär', 'sekretaer', $version );
-	}
-
-	if( $postamt && in_array('postamt', $modules) ) {
-		do_update( 'Postamt', 'postamt', $version );
+	foreach( $sources as $source => $options ) {
+		do_update( $source, $version );
 	}
 
 	echo '<p>Cleaning up …</p>';
@@ -150,9 +154,14 @@ if( ! $update_allowed ) {
 
 		<ul style="list-style-type: none; padding: 0;">
 			<?php
-			if( $eigenheim ) echo '<li><label><input type="checkbox" name="modules[]" value="eigenheim" checked> Eigenheim (v.'.$eigenheim.')</label></li>';
-			if( $sekretaer ) echo '<li><label><input type="checkbox" name="modules[]" value="sekretaer" checked> Sekretär (v.'.$sekretaer.')</label></li>';
-			if( $postamt ) echo '<li><label><input type="checkbox" name="modules[]" value="postamt" checked> Postamt (v.'.$postamt.')</label></li>';
+			foreach( $sources as $source => $options ) {
+				if( ! $options['installed_version'] ) continue;
+				?>
+				<li>
+					<label><input type="checkbox" name="modules[]" value="<?= $source ?>" checked> <?= $options['name'] ?> (v.<?= $options['installed_version'] ?>)</label>
+				</li>
+				<?php
+			}
 			?>
 		</ul>
 
@@ -171,15 +180,17 @@ if( ! $update_allowed ) {
 </html><?php
 
 
-function do_update( $name, $module, $version = 'latest' ) {
+function do_update( $source, $version = 'latest' ) {
 
-	global $homestead_abspath, $homestead_baseurl;
+	global $homestead_abspath, $homestead_baseurl, $sources;
 
-	echo '<p>Updating '.$name.' …</p>';
+	$options = $sources[$source];
+
+	echo '<p>Updating '.$options['name'].' …</p>';
 	flush();
 
-	$abspath = $homestead_abspath.$module.'/';
-	$baseurl = $homestead_baseurl.$module.'/';
+	$abspath = $homestead_abspath.$source.'/';
+	$baseurl = $homestead_baseurl.$source.'/';
 
 	touch( $abspath.'update' );
 
