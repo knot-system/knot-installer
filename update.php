@@ -40,11 +40,6 @@ if( file_exists($abspath.'update') || file_exists($abspath.'update.txt') ) {
 }
 
 
-if( ! $module_found ) {
-	echo '<strong>Error:</strong> it looks like homestead is not installed at this location!';
-	exit;
-}
-
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +83,11 @@ if( ! $module_found ) {
 
 <?php
 
-if( ! $update_allowed ) {
+if( ! $module_found ) {
+	
+	echo '<p>It looks like Homestead is not installed at this location!</p>';
+
+} elseif( ! $update_allowed ) {
 	?>
 	<p>Please create an empty file called <code>update</code> (or <code>update.txt</code>) in the root folder (so we are sure that you have access to the webserver), and then refresh this page</p>
 	<p><a href="<?= $baseurl ?>update.php">refresh this page</a></p>

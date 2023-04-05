@@ -6,11 +6,6 @@ include_once( 'config.php' );
 
 $local_phpversion = explode( '.', phpversion() );
 
-if( $local_phpversion[0] < $php_min_version_major ) {
-	echo '<strong>Error:</strong> your PHP version is too old (you need at least PHP '.$php_min_version_major.')';
-	exit;
-}
-
 $self = basename(__FILE__);
 
 $abspath = realpath(dirname(__FILE__)).'/';
@@ -24,9 +19,11 @@ $baseurl .= $_SERVER['HTTP_HOST'];
 $baseurl .= $basefolder;
 
 
-if( is_dir($abspath.'eigenheim/') || is_dir($abspath.'postamt/') || is_dir($abspath.'sekretaer/') ) {
-	echo '<strong>Error:</strong> it looks like Homestead is already installed at this location!';
-	exit;
+$is_installed = false;
+foreach( $sources as $source => $options ) {
+	if( is_dir($abspath.$options['target']) ) {
+		$is_installed = true;
+	}
 }
 
 
@@ -64,18 +61,28 @@ if( ! is_dir($temp_folder) ) {
 </head>
 <body>
 <main style="max-width: 600px; margin: 0 auto">
+
+	<h1>🏡 Homestead Installer</h1>
+
 <?php
 
-if( ! isset($_POST['action'])
+if( $local_phpversion[0] < $php_min_version_major ) {
+
+	echo '<p><strong>Error:</strong> your PHP version is too old (you need at least PHP '.$php_min_version_major.')</p>';
+
+} elseif( $is_installed ) {
+
+	echo '<p>It looks like Homestead is already installed at this location!</p>';
+
+} elseif( ! isset($_POST['action'])
  || $_POST['action'] != 'install'
  || empty($_POST['eigenheim'])
  || empty($_POST['eigenheim']['auth_mail'])
  || empty($_POST['eigenheim']['author_name'])
  || empty($_POST['eigenheim']['site_title'])
 ) {
-	?>
 
-	<h1>🏡 Homestead Installer</h1>
+	?>
 
 	<p>This script will install all modules required for a full <strong>Homestead</strong> installation. These modules are:</p>
 	<ul>
