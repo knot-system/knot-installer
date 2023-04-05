@@ -1,25 +1,6 @@
 <?php
 
-$installer_version = '0.1.1';
-
-$php_min_version_major = 8;
-
-$sources = [
-	'eigenheim' => [
-		'zipball' => 'https://api.github.com/repos/maxhaesslein/eigenheim/releases',
-		'target' => 'eigenheim/',
-	],
-	'sekretaer' => [
-		'zipball' => 'https://api.github.com/repos/maxhaesslein/sekretaer/releases',
-		'target' => 'sekretaer/',
-	],
-	'postamt' => [
-		'zipball' => 'https://api.github.com/repos/maxhaesslein/postamt/releases',
-		'target' => 'postamt/',
-	]
-];
-
-$useragent = 'maxhaesslein/homestead/'.$installer_version;
+include_once( 'config.php' );
 
 
 
@@ -44,7 +25,7 @@ $baseurl .= $basefolder;
 
 
 if( is_dir($abspath.'eigenheim/') || is_dir($abspath.'postamt/') || is_dir($abspath.'sekretaer/') ) {
-	echo '<strong>Error:</strong> it looks like homestead is already installed at this location!';
+	echo '<strong>Error:</strong> it looks like Homestead is already installed at this location!';
 	exit;
 }
 
@@ -355,7 +336,7 @@ function move_folder_to( $source, $target ){
 
 function get_remote_json( $url ) {
 
-	global $installer_version, $useragent;
+	global $homestead_version, $useragent;
 
 	$ch = curl_init( $url );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );

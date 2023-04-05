@@ -1,24 +1,6 @@
 <?php
 
-$updater_version = '0.1.1';
-
-$sources = [
-	'eigenheim' => [
-		'name' => 'Eigenheim',
-		'target' => 'eigenheim/',
-	],
-	'sekretaer' => [
-		'name' => 'Sekretär',
-		'target' => 'sekretaer/',
-	],
-	'postamt' => [
-		'name' => 'Postamt',
-		'target' => 'postamt/',
-	]
-];
-
-$useragent = 'maxhaesslein/homestead/'.$updater_version;
-
+include_once( 'config.php' );
 
 
 
@@ -189,8 +171,8 @@ function do_update( $source, $version = 'latest' ) {
 	echo '<p>Updating '.$options['name'].' …</p>';
 	flush();
 
-	$abspath = $homestead_abspath.$source.'/';
-	$baseurl = $homestead_baseurl.$source.'/';
+	$abspath = $homestead_abspath.$options['target'];
+	$baseurl = $homestead_baseurl.$options['target'];
 
 	touch( $abspath.'update' );
 
