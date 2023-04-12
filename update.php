@@ -202,6 +202,8 @@ if( ! $module_found ) {
 		echo '<p>Deleting old files … ';
 		flush();
 
+		// TODO: the new version should have a list of files to delete and copy, so that we can add new files with an update
+
 		@unlink( $abspath.'.gitignore' );
 		unlink( $abspath.'changelog.txt' );
 		unlink( $abspath.'config.php' );

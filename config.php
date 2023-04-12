@@ -1,6 +1,6 @@
 <?php
 
-$homestead_version = '0.1.1';
+$homestead_version = '0.1.2-pre';
 
 $sources = [
 	'eigenheim' => [
