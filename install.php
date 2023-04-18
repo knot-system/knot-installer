@@ -198,7 +198,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	$cookie_lifetime = 60*60*24*10; // 10 days, in seconds
 	setcookie( 'sekretaer-url', $baseurl, array(
 		'expires' => time()+$cookie_lifetime,
-		'path' => '/'
+		'path' => $basefolder
 	));
 
 	echo '<h3>cleaning up</h3>';
