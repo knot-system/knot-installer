@@ -56,6 +56,9 @@ if( ! is_dir($temp_folder) ) {
 		border: 0;
 		border-top: 1px solid;
 	}
+	code {
+		background: rgba(0,0,0,.1);
+	}
 	</style>
 </head>
 <body>
@@ -67,18 +70,22 @@ if( ! is_dir($temp_folder) ) {
 
 if( $local_phpversion[0] < $php_min_version_major ) {
 
-	echo '<p><strong>Error:</strong> your PHP version is too old (you need at least PHP '.$php_min_version_major.')</p>';
+	?>
+	<p><strong>Error:</strong> your PHP version is too old (you need at least <code>PHP <?php echo $php_min_version_major; ?></code>)</p>
+	<?php
 
 } elseif( ! $temp_folder ) {
 
 	?>
-	<p><strong>Error:</strong> could not create temp folder. Please check the permissions of this directory.<br>The permission of the folder <em><?	= $abspath ?></em> should be set to <code>644</code> (or <code>664</code>).</p>
+	<p><strong>Error:</strong> could not create temp folder. Please check the permissions of this directory.<br>The permission of the folder <em><?= $abspath ?></em> should be set to <code>644</code> (or <code>664</code>).</p>
 	<p>After changing the permission, <a href="install.php">refresh this page</a>.</p>
 	<?php
 
 } elseif( $is_installed ) {
 
-	echo '<p>It looks like Homestead is already installed at this location!</p>';
+	?>
+	<p>It looks like Homestead is already installed at this location!</p>
+	<?php
 
 } elseif( ! isset($_POST['action'])
  || $_POST['action'] != 'install'
