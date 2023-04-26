@@ -29,9 +29,8 @@ foreach( $sources as $source => $options ) {
 
 $temp_folder = $abspath.'tmp/';
 if( ! is_dir($temp_folder) ) {
-	if( mkdir( $temp_folder, 0777, true ) === false ) {
-		echo 'could not create temp folder';
-		exit;
+	if( @mkdir( $temp_folder, 0664, true ) === false ) {
+		$temp_folder = false;
 	}
 }
 
@@ -69,6 +68,13 @@ if( ! is_dir($temp_folder) ) {
 if( $local_phpversion[0] < $php_min_version_major ) {
 
 	echo '<p><strong>Error:</strong> your PHP version is too old (you need at least PHP '.$php_min_version_major.')</p>';
+
+} elseif( ! $temp_folder ) {
+
+	?>
+	<p><strong>Error:</strong> could not create temp folder. Please check the permissions of this directory.<br>The permission of the folder <em><?	= $abspath ?></em> should be set to <code>644</code> (or <code>664</code>).</p>
+	<p>After changing the permission, <a href="install.php">refresh this page</a>.</p>
+	<?php
 
 } elseif( $is_installed ) {
 
