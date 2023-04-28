@@ -2,6 +2,7 @@
 v.0.1.3
 
 Installer
+- allow installing of unstable dev version
 - add comments to .htaccess, at beginning and end of our block
 - bugfixes & enhancements
 

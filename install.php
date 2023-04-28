@@ -341,7 +341,7 @@ function install_module( $source, $target, $version ) {
 		if( $obj == '.' || $obj == '..' ) continue;
 		if( ! is_dir($module_temp_folder.$obj) ) continue;
 		if( ! str_starts_with($obj, $zip_folder_name_start) ) continue;
-		// the zip file should have exactly one subfolder, called 'maxhaesslein-{source}-{hash}'. this is what we want to get here
+		// the zip file should have exactly one subfolder. this is what we want to get here
 		$subfolder = $module_temp_folder.$obj.'/';
 	}
 
