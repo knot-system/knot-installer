@@ -215,7 +215,14 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	unlink( $abspath.'install.php' );
 
-	echo '<p>all done. please <a href="'.$baseurl.'">refresh this page</a></p>';
+	echo '<p>all done.</p>';
+
+	if( array_key_exists('sekretaer', $sources) ) {
+		echo '<p>&raquo; you can now login to Sekretaer at <a href="'.$baseurl.$sources['sekretaer']['target'].'?login_url='.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.$sources['sekretaer']['target'].'</a></p>';
+	}
+	if( array_key_exists('eigenheim', $sources) ) {
+		echo '<p>&raquo; you can now view your Eigenheim system at at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.'</a></p>';
+	}
 
 	flush();
 
