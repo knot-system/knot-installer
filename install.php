@@ -3,6 +3,10 @@
 include_once( 'config.php' );
 
 
+if( ! isset($_REQUEST['debug']) ) {
+	error_reporting(0);
+}
+
 
 $php_min_version_major = 8;
 

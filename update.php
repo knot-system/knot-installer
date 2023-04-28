@@ -3,6 +3,10 @@
 include_once( 'config.php' );
 
 
+if( ! isset($_REQUEST['debug']) ) {
+	error_reporting(0);
+}
+
 
 $api_url = 'https://api.github.com/repos/maxhaesslein/homestead/releases';
 $dev_zip = 'https://github.com/maxhaesslein/homestead/archive/refs/heads/main.zip';
