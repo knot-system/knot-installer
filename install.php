@@ -29,7 +29,7 @@ foreach( $sources as $source => $options ) {
 
 $temp_folder = $abspath.'tmp/';
 if( ! is_dir($temp_folder) ) {
-	if( @mkdir( $temp_folder, 0776, true ) === false ) {
+	if( @mkdir( $temp_folder, 0774, true ) === false ) {
 		$temp_folder = false;
 	}
 }
