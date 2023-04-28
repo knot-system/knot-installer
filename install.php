@@ -4,6 +4,11 @@ include_once( 'config.php' );
 
 
 
+$php_min_version_major = 8;
+
+$useragent = 'maxhaesslein/homestead/'.$homestead_version;
+
+
 $local_phpversion = explode( '.', phpversion() );
 
 $self = basename(__FILE__);

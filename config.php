@@ -19,7 +19,3 @@ $sources = [
 		'zipball' => 'https://api.github.com/repos/maxhaesslein/postamt/releases',
 	]
 ];
-
-$php_min_version_major = 8;
-
-$useragent = 'maxhaesslein/homestead/'.$homestead_version;

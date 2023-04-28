@@ -7,6 +7,9 @@ include_once( 'config.php' );
 $api_url = 'https://api.github.com/repos/maxhaesslein/homestead/releases';
 $dev_zip = 'https://github.com/maxhaesslein/homestead/archive/refs/heads/main.zip';
 
+$useragent = 'maxhaesslein/homestead/'.$homestead_version;
+
+
 $self = basename(__FILE__);
 
 $abspath = realpath(dirname(__FILE__)).'/';
