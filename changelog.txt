@@ -3,6 +3,7 @@ v.0.1.3
 
 Installer
 - add comments to .htaccess, at beginning and end of our block
+- bugfixes & enhancements
 
 
 v.0.1.2
