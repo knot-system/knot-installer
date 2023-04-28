@@ -208,12 +208,6 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	$content = "# BEGIN homestead\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$basefolder."\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule (.*) eigenheim/$1 [L,QSA]\r\nRewriteRule ^$ eigenheim/ [L,QSA]\r\n# END homestead\r\n</IfModule>";
 	file_put_contents( $abspath.'.htaccess', $content );
 
-	$cookie_lifetime = 60*60*24*10; // 10 days, in seconds
-	setcookie( 'sekretaer-url', $baseurl, array(
-		'expires' => time()+$cookie_lifetime,
-		'path' => $basefolder
-	));
-
 	echo '<h3>cleaning up</h3>';
 	flush();
 
