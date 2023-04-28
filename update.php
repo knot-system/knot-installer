@@ -7,6 +7,8 @@ include_once( 'config.php' );
 $api_url = 'https://api.github.com/repos/maxhaesslein/homestead/releases';
 $dev_zip = 'https://github.com/maxhaesslein/homestead/archive/refs/heads/main.zip';
 
+$homestead_version = file_get_contents('version.txt');
+
 $useragent = 'maxhaesslein/homestead/'.$homestead_version;
 
 

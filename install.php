@@ -6,6 +6,8 @@ include_once( 'config.php' );
 
 $php_min_version_major = 8;
 
+$homestead_version = file_get_contents('version.txt');
+
 $useragent = 'maxhaesslein/homestead/'.$homestead_version;
 
 
