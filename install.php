@@ -117,6 +117,11 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	
 			<p>You need to provide some basic information before we can begin the installation:</p>
 
+			<p><label><strong>Version</strong><br><select name="version">
+				<option value="latest" selected>latest stable release (recommended)</option>
+				<option value="dev">unstable dev release (not recommended)</option>
+			</select></label></p>
+
 			<p><label><strong>Site Title</strong><br><input type="text" name="eigenheim[site_title]" required><br><small>(the title of your website)</small></label></p>
 			<p><label><strong>Author Name</strong><br><input type="text" name="eigenheim[author_name]" required><br><small>(your name, displayed on your website)</small></label></p>
 			<p><label><strong>Authorization Mail</strong><br><input type="email" name="eigenheim[auth_mail]" required><br><small>(your email address; this is were we send the login token to, when you log into the Sekretär backend. It is not displayed publicly, but is added to the Eigenheim HTML source code. This option will be removed later, when we have our own authorization module)</small></label></p>
@@ -151,13 +156,18 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	foreach( $sources as $source => $source_info ) {
 
+		$version = 'stable';
+		if( isset($_POST['version']) && $_POST['version'] == 'dev' ) {
+			$version = 'dev';
+		}
+
 		flush();
 
 		echo '<h3>Installing '.$source.'</h3>';
 
 		$target_folder = $abspath.$source_info['target'];
 
-		install_module( $source, $target_folder );
+		install_module( $source, $target_folder, $version );
 
 		flush();
 
@@ -248,29 +258,45 @@ function post_request( $url, $post_data = array() ){
 }
 
 
-function install_module( $source, $target ) {
+function install_module( $source, $target, $version ) {
 
 	global $temp_folder, $sources, $useragent;
 
-	$zipball = $sources[$source]['zipball'];
+	if( $version == 'dev' ) {
 
-	$json = get_remote_json( $zipball );
-	if( ! $json || ! is_array($json) || ! count($json) ) {
-		?>
-		<p><strong>Error:</strong> could not get release information from GitHub</p>
-		<?php
-		exit;
+		$zipball = $sources[$source]['zipball_dev'];
+
+		$zip_folder_name_start = $source.'-';
+
+		echo '<p>Installing unstable dev release</p>';
+
+	} else {
+
+		$zipball = $sources[$source]['zipball_stable'];
+
+		$json = get_remote_json( $zipball );
+		if( ! $json || ! is_array($json) || ! count($json) ) {
+			?>
+			<p><strong>Error:</strong> could not get release information from GitHub</p>
+			<?php
+			exit;
+		}
+
+		$latest_release = $json[0];
+
+		if( empty($latest_release->zipball_url) ) {
+			?>
+			<p><strong>Error:</strong> could not get zip download url from GitHub</p>
+			<?php
+			exit;	
+		}
+		$zipball = $latest_release->zipball_url;
+
+		$zip_folder_name_start = 'maxhaesslein-'.$source.'-';
+
+		echo '<p>Installing latest stable release</p>';
+
 	}
-
-	$latest_release = $json[0];
-
-	if( empty($latest_release->zipball_url) ) {
-		?>
-		<p><strong>Error:</strong> could not get zip download url from GitHub</p>
-		<?php
-		exit;	
-	}
-	$zipball = $latest_release->zipball_url;
 
 	echo '<p>Downloading .zip from GitHub … ';
 	flush();
@@ -314,7 +340,7 @@ function install_module( $source, $target ) {
 	foreach( scandir( $module_temp_folder ) as $obj ) {
 		if( $obj == '.' || $obj == '..' ) continue;
 		if( ! is_dir($module_temp_folder.$obj) ) continue;
-		if( ! str_starts_with($obj, 'maxhaesslein-'.$source.'-') ) continue;
+		if( ! str_starts_with($obj, $zip_folder_name_start) ) continue;
 		// the zip file should have exactly one subfolder, called 'maxhaesslein-{source}-{hash}'. this is what we want to get here
 		$subfolder = $module_temp_folder.$obj.'/';
 	}
