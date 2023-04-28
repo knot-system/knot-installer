@@ -187,7 +187,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 			$config['start'] = true;
 		} elseif( $source == 'postamt' ) {
 			$config['authorized_urls'] = $baseurl;
-			$config['refresh_on_connect'] = true;
+			$config['refresh_on_connect'] = 'true';
 		}
 
 
