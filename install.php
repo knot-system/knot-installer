@@ -55,9 +55,6 @@ if( ! is_dir($temp_folder) ) {
 			fieldset legend {
 				font-weight: bolder;
 			}
-		fieldset.unimportant {
-			opacity: 0.5;
-		}
 	hr {
 		margin: 2em 0;
 		border: 0;
@@ -126,20 +123,6 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked> create Eigenheim test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
 
 		</fieldset>
-
-
-		<fieldset class="unimportant">
-
-			<legend>Environment Variables</legend>
-			<p>if something goes wrong, this helps to debug the issue:</p>
-			<ul>
-				<li>ABSPATH: <em><?= $abspath ?></em></li>
-				<li>BASEFOLDER: <em><?= $basefolder ?></em></li>
-				<li>BASEURL: <em><?= $baseurl ?></em></li>
-			</ul>
-
-		</fieldset>
-
 
 		<p><strong>This is an early beta version!</strong> Some things may break, or change in the future!</p>
 
