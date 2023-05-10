@@ -209,7 +209,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	flush();
 
-	$content = "# BEGIN homestead\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$basefolder."\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule (.*) eigenheim/$1 [L,QSA]\r\nRewriteRule ^$ eigenheim/ [L,QSA]\r\n# END homestead\r\n</IfModule>";
+	$content = "# BEGIN homestead\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$basefolder."\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule (.*) eigenheim/$1 [L,QSA]\r\nRewriteRule ^$ eigenheim/ [L,QSA]\r\n</IfModule>\r\n# END homestead";
 	file_put_contents( $abspath.'.htaccess', $content );
 
 	echo '<h3>cleaning up</h3>';
