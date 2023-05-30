@@ -128,7 +128,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	?>
 	<p>It looks like Homestead is already installed at this location!</p>
-	<p>Please delete the existing subfolders, and restart the installation.</p>
+	<p>Please delete the existing subfolders, then <a href="install.php">refresh this page</a>.</p>
 	<?php
 
 } elseif( ! isset($_POST['action'])
