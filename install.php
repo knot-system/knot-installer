@@ -45,6 +45,7 @@ if( ! is_dir($temp_folder) ) {
 	}
 }
 
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +80,15 @@ if( ! is_dir($temp_folder) ) {
 if( $local_phpversion[0] < $php_min_version_major ) {
 
 	?>
-	<p><strong>Error:</strong> your PHP version is too old (you need at least <code>PHP <?php echo $php_min_version_major; ?></code>)</p>
+	<p><strong>Error:</strong> your PHP version is too old (you need at least <code>PHP <?php echo $php_min_version_major; ?></code>).</p>
+	<p>Please upgrade your PHP version to at least version <code><?php echo $php_min_version_major ?></code> and try again.</p>
+	<?php
+
+} elseif( ! extension_loaded('gd') && ! extension_loaded('imagick') ) {
+
+	?>
+	<p><strong>Error:</strong> it looks like your server does not have the <code>GD</code> or <code>ImageMagick</code> extension installed, but we depend on it to resize and cache images.</p>
+	<p>Please make sure your server has the <code>GD</code> or <code>ImageMagick</code> extension, and try again.</p>
 	<?php
 
 } elseif( ! $temp_folder ) {
@@ -93,6 +102,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	?>
 	<p>It looks like Homestead is already installed at this location!</p>
+	<p>Please delete the existing subfolders, and restart the installation.</p>
 	<?php
 
 } elseif( ! isset($_POST['action'])
