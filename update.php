@@ -152,7 +152,7 @@ if( ! $module_found ) {
 		if( ! is_dir($temp_folder) ) {
 			$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
 			if( mkdir( $temp_folder, 0777, true ) === false ) {
-				echo 'could not create temp folder';
+				echo '<p><strong>Error:</strong> could not create temp folder</p>';
 				exit;
 			}
 			umask($oldumask); // we need this after changing permissions with mkdir
@@ -184,7 +184,10 @@ if( ! $module_found ) {
 		$temp_zip_folder = $temp_folder.'/_new_release/';
 		if( is_dir($temp_zip_folder) ) deleteDirectory($temp_zip_folder);
 		$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
-		mkdir( $temp_zip_folder );
+		if( mkdir( $temp_zip_folder, 0777, true ) === false ) {
+			echo '<p><strong>Error:</strong> could not create temp folder for zip unpacking</p>';
+			exit;
+		}
 		umask($oldumask); // we need this after changing permissions with mkdir
 
 		$zip = new ZipArchive;
