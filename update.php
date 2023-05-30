@@ -359,7 +359,7 @@ if( ! $module_found ) {
 	<?php
 	flush();
 
-	foreach( $sources as $source => $options ) {
+	foreach( $_REQUEST['modules'] as $source ) {
 		do_update( $source, $version );
 	}
 
