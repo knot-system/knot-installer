@@ -46,6 +46,21 @@ if( ! is_dir($temp_folder) ) {
 }
 
 
+$required_extensions = array(
+	'gd',
+	'simplexml',
+	'curl',
+	'dom'
+);
+
+$missing_extensions = array();
+foreach( $required_extensions as $required_extension ) {
+	if( ! extension_loaded($required_extension) ) {
+		$missing_extensions[] = $required_extension;
+	}
+}
+
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,25 +99,22 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	<p>Please upgrade your PHP version to at least version <code><?php echo $php_min_version_major ?></code> and try again.</p>
 	<?php
 
-} elseif( ! extension_loaded('gd') && ! extension_loaded('imagick') ) {
+} elseif( count($missing_extensions) ) {
 
 	?>
-	<p><strong>Error:</strong> it looks like your server does not have the <code>GD</code> or <code>ImageMagick</code> extension installed, but we depend on it to resize and cache images.</p>
-	<p>Please make sure your server has the <code>GD</code> or <code>ImageMagick</code> extension, and try again.</p>
-	<?php
-
-} elseif( ! extension_loaded('simplexml') ) {
-
-	?>
-	<p><strong>Error:</strong> it looks like your server does not have the <code>SimpleXML</code> extension installed, but we depend on it.</p>
-	<p>Please make sure your server has the <code>SimpleXML</code> extension, and try again.</p>
-	<?php
-
-} elseif( ! extension_loaded('curl') ) {
-
-	?>
-	<p><strong>Error:</strong> it looks like your server does not have the <code>CURL</code> extension installed, but we depend on it.</p>
-	<p>Please make sure your server has the <code>CURL</code> extension, and try again.</p>
+	<p><strong>Error:</strong> it looks like your server is missing one or more extension that we depend on. Please make sure the following extensions are installed and working:</p>
+	<ul>
+		<?php
+		foreach( $missing_extensions as $missing_extension ) {
+			?>
+			<li>
+				<code><?php echo $missing_extension ?></code>
+			</li>
+			<?php
+		}
+		?>
+	</ul>
+	<p>Then <a href="install.php">refresh this page</a>.</p>
 	<?php
 
 } elseif( ! $temp_folder ) {
