@@ -1,3 +1,8 @@
+v.0.1.4
+
+- better compatibility for some server configurations
+- bugfixes & enhancements
+
 
 v.0.1.3
 
