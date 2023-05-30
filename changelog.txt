@@ -1,9 +1,14 @@
 v.0.1.4
 
-- the installer now checks for some required extensions (like GD, CURL, SimpleXML, DOM)
-- the installer now checks if the config file was created
 - better compatibility for some server configurations
 - bugfixes & enhancements
+
+Installer
+- check, if some required extensions (like GD, CURL, SimpleXML, DOM) are installed
+- check, if the config file was created
+
+Updater
+- only update selected modules, instead of all modules
 
 
 v.0.1.3
