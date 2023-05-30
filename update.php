@@ -150,10 +150,12 @@ if( ! $module_found ) {
 
 		$temp_folder = $abspath.'_homestead_temp/';
 		if( ! is_dir($temp_folder) ) {
+			$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
 			if( mkdir( $temp_folder, 0777, true ) === false ) {
 				echo 'could not create temp folder';
 				exit;
 			}
+			umask($oldumask); // we need this after changing permissions with mkdir
 		}
 
 		echo '<p>Downloading new .zip from GitHub … ';
@@ -181,7 +183,9 @@ if( ! $module_found ) {
 		
 		$temp_zip_folder = $temp_folder.'/_new_release/';
 		if( is_dir($temp_zip_folder) ) deleteDirectory($temp_zip_folder);
+		$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
 		mkdir( $temp_zip_folder );
+		umask($oldumask); // we need this after changing permissions with mkdir
 
 		$zip = new ZipArchive;
 		$res = $zip->open($temp_zip_file);
