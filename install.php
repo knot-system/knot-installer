@@ -91,6 +91,13 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	<p>Please make sure your server has the <code>GD</code> or <code>ImageMagick</code> extension, and try again.</p>
 	<?php
 
+} elseif( ! extension_loaded('simplexml') ) {
+
+	?>
+	<p><strong>Error:</strong> it looks like your server does not have the <code>SimpleXML</code> extension installed, but we depend on it.</p>
+	<p>Please make sure your server has the <code>SimpleXML</code> extension, and try again.</p>
+	<?php
+
 } elseif( ! $temp_folder ) {
 
 	?>
