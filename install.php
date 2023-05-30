@@ -40,9 +40,11 @@ foreach( $sources as $source => $options ) {
 
 $temp_folder = $abspath.'tmp/';
 if( ! is_dir($temp_folder) ) {
+	$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
 	if( @mkdir( $temp_folder, 0774, true ) === false ) {
 		$temp_folder = false;
 	}
+	umask($oldumask); // we need this after changing permissions with mkdir
 }
 
 
@@ -372,7 +374,9 @@ function install_module( $source, $target, $version ) {
 
 	$module_temp_folder = $temp_folder.$source.'/';
 	if( is_dir($module_temp_folder) ) delete_directory($module_temp_folder);
+	$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
 	mkdir( $module_temp_folder );
+	umask($oldumask); // we need this after changing permissions with mkdir
 
 	$zip = new ZipArchive;
 	$res = $zip->open($temp_zip_file);
@@ -414,7 +418,9 @@ function install_module( $source, $target, $version ) {
 
 function move_folder_to( $source, $target ){
     if( ! is_dir($target) ) {
+    	$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
     	mkdir( $target, null, true );
+    	umask($oldumask); // we need this after changing permissions with mkdir
     }
     rename( $source, $target );
 }
