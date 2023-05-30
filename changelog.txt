@@ -1,6 +1,7 @@
 v.0.1.4
 
 - the installer now checks for some required extensions (like GD, CURL, SimpleXML, DOM)
+- the installer now checks if the config file was created
 - better compatibility for some server configurations
 - bugfixes & enhancements
 

@@ -243,7 +243,12 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 		time_nanosleep(0,500000000); // sleep for 0.5 seconds
 
-		echo 'done.</p>';
+		if( ! file_exists($baseurl.'config.php') ) {
+			echo '<span style="color: red;">could not create config file!</span>';
+		} else {
+			echo 'done.';
+		}
+		echo '</p>';
 
 	}
 
