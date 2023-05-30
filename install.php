@@ -175,6 +175,8 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 		flush();
 
+		time_nanosleep(0,500000000); // sleep for 0.5 seconds
+
 		$config = [];
 		if( ! empty($_POST[$source]) ) {
 			$config = $_POST[$source];
@@ -202,6 +204,8 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 		flush();
 
 		post_request( $setup_url, $config );
+
+		time_nanosleep(0,500000000); // sleep for 0.5 seconds
 
 		echo 'done.</p>';
 
