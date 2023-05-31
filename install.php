@@ -238,14 +238,14 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 		// call setup of this module to create the config
 		$setup_url = $baseurl.$source_info['target'].'index.php';
 
-		echo '<p>updating confing … ';
+		echo '<p>updating config … ';
 		flush();
 
 		post_request( $setup_url, $config );
 
 		time_nanosleep(0,500000000); // sleep for 0.5 seconds
 
-		if( ! file_exists($baseurl.'config.php') ) {
+		if( ! file_exists($abspath.$source_info['target'].'config.php') ) {
 			echo '<span style="color: red;">could not create config file!</span>';
 		} else {
 			echo 'done.';
