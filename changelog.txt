@@ -1,6 +1,6 @@
 v.0.1.5
 
-- 
+- bugfixes & enhancements
 
 
 v.0.1.4
