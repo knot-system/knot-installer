@@ -18,5 +18,11 @@ $sources = [
 		'target' => 'postamt/',
 		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/postamt/releases',
 		'zipball_dev' => 'https://github.com/maxhaesslein/postamt/archive/refs/heads/main.zip',
+	],
+	'einwohnermeldeamt' => [
+		'name' => 'Einwohnermeldeamt',
+		'target' => 'einwohnermeldeamt/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/einwohnermeldeamt/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/einwohnermeldeamt/archive/refs/heads/main.zip',
 	]
 ];

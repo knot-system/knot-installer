@@ -136,7 +136,6 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 } elseif( ! isset($_POST['action'])
  || $_POST['action'] != 'install'
  || empty($_POST['eigenheim'])
- || empty($_POST['eigenheim']['auth_mail'])
  || empty($_POST['eigenheim']['author_name'])
  || empty($_POST['eigenheim']['site_title'])
 ) {
@@ -148,6 +147,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 		<li><strong>Eigenheim</strong> as the website (and micropub server), that visitors will see</li>
 		<li><strong>Sekretär</strong> as the micropub & microsub client, where you can write new posts and read posts from websites you follow</li>
 		<li><strong>Postamt</strong> as the microsub server, that will manage the websites you follow and collect new posts they publish</li>
+		<li><strong>Einwohnermeldeamt</strong> as the IndieAuth server, that will authorize you via a password, when you want to log in</li>
 	</ul>
 
 	<p>Your server should meet all the necessary requirements.</p>
@@ -166,8 +166,30 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 			<p><label><strong>Site Title</strong><br><input type="text" name="eigenheim[site_title]" required><br><small>(the title of your website)</small></label></p>
 			<p><label><strong>Author Name</strong><br><input type="text" name="eigenheim[author_name]" required><br><small>(your name, displayed on your website)</small></label></p>
-			<p><label><strong>Authorization Mail</strong><br><input type="email" name="eigenheim[auth_mail]" required><br><small>(your email address; this is were we send the login token to, when you log into the Sekretär backend. It is not displayed publicly, but is added to the Eigenheim HTML source code. This option will be removed later, when we have our own authorization module)</small></label></p>
+			<p><label id="password-label"><strong>Password</strong><br><input type="text" class="password-field" name="einwohnermeldeamt[password]" minlength="8" required> <span class="password-toggle" style="display: none;"></span><br><small>(you use this password to log into the backend, where you can write new posts and read posts from pages you follow; the password needs to be at least 8 characters long)</small></label></p>
 			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked> create Eigenheim test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
+
+			<script>
+			(function(){
+				var label = document.getElementById('password-label'),
+					field = label.querySelector('.password-field'),
+					toggle = label.querySelector('.password-toggle');
+
+				toggle.style.display = 'inline-block';
+				field.type = 'password';
+				toggle.innerHTML = '(<a href="#">show password</a>)';
+
+				toggle.addEventListener( 'click', function(){
+					if( field.type == 'password' ) {
+						field.type = 'text';
+						toggle.innerHTML = '(<a href="#">hide password</a>)';
+					} else {
+						field.type = 'password';
+						toggle.innerHTML = '(<a href="#">show password</a>)';
+					}
+				});
+			})();
+			</script>
 
 		</fieldset>
 
@@ -220,18 +242,23 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 			$config = $_POST[$source];
 		}
 
+
 		// automatically set some additional options:
 		$config['setup'] = true;
 		if( $source == 'eigenheim') {
 			$config['baseurl_overwrite'] = $baseurl;
 			$config['basefolder_overwrite'] = $basefolder;
-			$config['microsub'] = $baseurl.'postamt/';
+			$config['microsub'] = $baseurl.$sources['postamt']['target'].'/';
+			$config['authorization_endpoint'] = $baseurl.$sources['einwohnermeldeamt']['target'].'/auth'
+			$config['token_endpoint'] = $baseurl.$sources['einwohnermeldeamt']['target'].'/token';
 		} elseif( $source == 'sekretaer' ) {
 			$config['authorized_urls'] = $baseurl;
 			$config['start'] = true;
 		} elseif( $source == 'postamt' ) {
 			$config['authorized_urls'] = $baseurl;
 			$config['refresh_on_connect'] = 'true';
+		} elseif( $source == 'einwohnermeldeamt' ) {
+			$config['me'] = $baseurl;
 		}
 
 
