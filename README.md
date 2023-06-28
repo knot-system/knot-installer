@@ -1,6 +1,6 @@
 # Homestead
 
-This script installs and configures a full Homestead system, consisting of the modules [Eigenheim](https://github.com/maxhaesslein/eigenheim), [Sekretär](https://github.com/maxhaesslein/sekretaer) and [Postamt](https://github.com/maxhaesslein/postamt).
+This script installs and configures a full Homestead system, consisting of the modules [Eigenheim](https://github.com/maxhaesslein/eigenheim), [Sekretär](https://github.com/maxhaesslein/sekretaer), [Postamt](https://github.com/maxhaesslein/postamt) and [Einwohnermeldeamt](https://github.com/maxhaesslein/einwohnermeldeamt).
 
 
 ## Initial Setup
@@ -9,7 +9,7 @@ Your server needs to run at least PHP 8.0 or later.
 
 Download the latest release from the [releases page](https://github.com/maxhaesslein/homestead/releases), and extract it to a folder on your webserver. Point your webbrowser to the `install.php` file (for example, `https://www.example.com/install.php`) - make sure, that the URL you open is the URL you want to use as your home page; if you want to use `https://`, open the `install.php` with `https://`, and if you want to use a `www`-subdomain, make sure to include it. The `install.php` will then guide you through the setup process, which will install and configure all modules in their own subfolders. After the installation, the `install.php` gets deleted automatically.
 
-You then can open the website at `https://www.example.com`. The Sekretär backend can be reached inside the `sekretaer/` subfolder (for example, `https://www.example.com/sekretaer/`); there you can log in with your root URL (`https://www.example.com`). The login-flow will then use indieauth.com to send a logincode to the email address you set while installing. This will change in the future, when we add our own authorization module.
+You then can open the website at `https://www.example.com`. The Sekretär backend can be reached inside the `sekretaer/` subfolder (for example, `https://www.example.com/sekretaer/`); there you can log in with your root URL (`https://www.example.com`).
 
 
 ## Updating
@@ -25,7 +25,9 @@ You can export the sites you follow in Sekretär, when managing feeds.
 
 To backup your Eigenheim posts, copy the folder `eigenheim/content/` to a safe location.
 
-For detailed instructions, read the `README.md` inside the `eigenheim/`, `sekretaer/` and `postamt/` folders.
+To backup the configuration, copy the `config.php` files inside the `eigenheim/`, `sekretaer/`, `postamt/` and `einwohnermeldeamt/` subfolders.
+
+For detailed instructions, read the `README.md` inside the `eigenheim/`, `sekretaer/`, `postamt/` and `einwohnermeldeamt/` subfolders.
 
 
 ## Changing the domain name
