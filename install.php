@@ -249,8 +249,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 			$config['baseurl_overwrite'] = $baseurl;
 			$config['basefolder_overwrite'] = $basefolder;
 			$config['microsub'] = $baseurl.$sources['postamt']['target'];
-			$config['authorization_endpoint'] = $baseurl.$sources['einwohnermeldeamt']['target'].'auth';
-			$config['token_endpoint'] = $baseurl.$sources['einwohnermeldeamt']['target'].'token';
+			$config['indieauth-metadata'] = $baseurl.$sources['einwohnermeldeamt']['target'].'metadata';
 		} elseif( $source == 'sekretaer' ) {
 			$config['authorized_urls'] = $baseurl;
 			$config['start'] = true;

@@ -1,5 +1,7 @@
 v.0.1.6
 
+- on install, set indieauth-metadata for eigenheim, instead of authorization_endpoint and token_endpoint
+
 
 v.0.1.5
 
