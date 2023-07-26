@@ -1,4 +1,4 @@
-# Homestead
+# Homestead Installer
 
 This script installs and configures a full Homestead system, consisting of the modules [Eigenheim](https://github.com/maxhaesslein/eigenheim), [Sekretär](https://github.com/maxhaesslein/sekretaer), [Postamt](https://github.com/maxhaesslein/postamt) and [Einwohnermeldeamt](https://github.com/maxhaesslein/einwohnermeldeamt).
 
