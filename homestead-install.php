@@ -1,6 +1,41 @@
 <?php
 
-include_once( 'config.php' );
+$installer_version = '0.1.6';
+
+
+$sources = [
+	'eigenheim' => [
+		'name' => 'Eigenheim',
+		'target' => 'eigenheim/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/eigenheim/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/eigenheim/archive/refs/heads/main.zip',
+	],
+	'sekretaer' => [
+		'name' => 'Sekretär',
+		'target' => 'sekretaer/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/sekretaer/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/sekretaer/archive/refs/heads/main.zip',
+	],
+	'postamt' => [
+		'name' => 'Postamt',
+		'target' => 'postamt/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/postamt/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/postamt/archive/refs/heads/main.zip',
+	],
+	'einwohnermeldeamt' => [
+		'name' => 'Einwohnermeldeamt',
+		'target' => 'einwohnermeldeamt/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/einwohnermeldeamt/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/einwohnermeldeamt/archive/refs/heads/main.zip',
+	],
+	'homestead-control' => [
+		'name' => 'Homestead Control',
+		'target' => 'homestead-control/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/homestead-control/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/homestead-control/archive/refs/heads/main.zip',
+	]
+];
+
 
 
 if( ! isset($_REQUEST['debug']) ) {
@@ -10,9 +45,7 @@ if( ! isset($_REQUEST['debug']) ) {
 
 $php_min_version_major = 8;
 
-$homestead_version = file_get_contents('version.txt');
-
-$useragent = 'maxhaesslein/homestead/'.$homestead_version;
+$useragent = 'maxhaesslein/homestead-installer/'.$installer_version;
 
 
 $local_phpversion = explode( '.', phpversion() );
@@ -35,16 +68,6 @@ foreach( $sources as $source => $options ) {
 	if( is_dir($abspath.$options['target']) ) {
 		$is_installed = true;
 	}
-}
-
-
-$temp_folder = $abspath.'tmp/';
-if( ! is_dir($temp_folder) ) {
-	$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
-	if( @mkdir( $temp_folder, 0774, true ) === false ) {
-		$temp_folder = false;
-	}
-	umask($oldumask); // we need this after changing permissions with mkdir
 }
 
 
@@ -98,7 +121,8 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	?>
 	<p><strong>Error:</strong> your PHP version is too old (you need at least <code>PHP <?php echo $php_min_version_major; ?></code>).</p>
-	<p>Please upgrade your PHP version to at least version <code><?php echo $php_min_version_major ?></code> and try again.</p>
+	<p>Please upgrade your PHP version to at least version <code><?php echo $php_min_version_major ?></code></p>
+	<p>Then <a href="homestead-install.php">refresh this page</a>.</p>
 	<?php
 
 } elseif( count($missing_extensions) ) {
@@ -116,21 +140,14 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 		}
 		?>
 	</ul>
-	<p>Then <a href="install.php">refresh this page</a>.</p>
-	<?php
-
-} elseif( ! $temp_folder ) {
-
-	?>
-	<p><strong>Error:</strong> could not create temp folder. Please check the permissions of this directory.<br>The permission of the folder <em><?= $abspath ?></em> should be set to <code>644</code> (or <code>664</code>).</p>
-	<p>After changing the permission, <a href="install.php">refresh this page</a>.</p>
+	<p>Then <a href="homestead-install.php">refresh this page</a>.</p>
 	<?php
 
 } elseif( $is_installed ) {
 
 	?>
 	<p>It looks like Homestead is already installed at this location!</p>
-	<p>Please delete the existing subfolders, then <a href="install.php">refresh this page</a>.</p>
+	<p>Please delete the existing subfolders, then <a href="homestead-install.php">refresh this page</a>.</p>
 	<?php
 
 } elseif( ! isset($_POST['action'])
@@ -218,6 +235,23 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	// running install:
 
+	$temp_folder = $abspath.'tmp/';
+	if( ! is_dir($temp_folder) ) {
+		$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
+		if( @mkdir( $temp_folder, 0774, true ) === false ) {
+			$temp_folder = false;
+		}
+		umask($oldumask); // we need this after changing permissions with mkdir
+	}
+
+	if( ! $temp_folder ) {
+		?>
+		<p><strong>Error:</strong> could not create temporary <code>tmp/</code> folder. Please check the permissions of this directory.<br>The permission of the folder <em><?= $abspath ?></em> should be set to <code>644</code> (or <code>664</code>).</p>
+		<p>After changing the permission, <a href="homestead-install.php">refresh this page</a>.</p>
+		<?php
+		exit;
+	}
+
 	foreach( $sources as $source => $source_info ) {
 
 		$version = 'stable';
@@ -290,15 +324,18 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	delete_directory($temp_folder);
 
-	unlink( $abspath.'install.php' );
+	unlink( $abspath.'homestead-install.php' );
 
 	echo '<p>all done.</p>';
 
-	if( array_key_exists('sekretaer', $sources) ) {
-		echo '<p>&raquo; you can now login to Sekretär at <a href="'.$baseurl.$sources['sekretaer']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['sekretaer']['target'].'</a></p>';
-	}
 	if( array_key_exists('eigenheim', $sources) ) {
-		echo '<p>&raquo; you can now view your Eigenheim system at at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.'</a></p>';
+		echo '<p>&raquo; you can view your Eigenheim system at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.'</a> - this is your personal website.</p>';
+	}
+	if( array_key_exists('sekretaer', $sources) ) {
+		echo '<p>&raquo; you can log in to Sekretär at <a href="'.$baseurl.$sources['sekretaer']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['sekretaer']['target'].'</a> to write new posts and read posts from other websites.</p>';
+	}
+	if( array_key_exists('homestead-control', $sources) ) {
+		echo '<p>&raquo; you can log in to the Homestead Control at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.$sources['homestead-control']['target'].'</a> to edit settings and update all modules.</p>';
 	}
 
 	flush();
@@ -454,7 +491,7 @@ function move_folder_to( $source, $target ){
 
 function get_remote_json( $url ) {
 
-	global $homestead_version, $useragent;
+	global $installer_version, $useragent;
 
 	$ch = curl_init( $url );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );

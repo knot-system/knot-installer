@@ -1,8 +1,5 @@
-tmp/
-eigenheim/
-sekretaer/
-postamt/
-.htaccess
-build.sh
-update
-update.txt
+/*
+!/.gitignore
+!/changelog.txt
+!/homestead-install.php
+!/README.md
