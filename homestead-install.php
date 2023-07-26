@@ -335,7 +335,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 		echo '<p>&raquo; you can log in to Sekretär at <a href="'.$baseurl.$sources['sekretaer']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['sekretaer']['target'].'</a> to write new posts and read posts from other websites.</p>';
 	}
 	if( array_key_exists('homestead-control', $sources) ) {
-		echo '<p>&raquo; you can log in to the Homestead Control at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.$sources['homestead-control']['target'].'</a> to edit settings and update all modules.</p>';
+		echo '<p>&raquo; you can log in to the Homestead Control at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.$sources['homestead-control']['target'].'?login_url='.urlencode($baseurl).'</a> to edit settings and update all modules.</p>';
 	}
 
 	flush();
