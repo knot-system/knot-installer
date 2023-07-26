@@ -393,7 +393,7 @@ function install_module( $source, $target, $version ) {
 			?>
 			<p><strong>Error:</strong> could not get release information from GitHub</p>
 			<?php
-			exit;
+			return;
 		}
 
 		$latest_release = $json[0];
@@ -445,7 +445,7 @@ function install_module( $source, $target, $version ) {
 	$res = $zip->open($temp_zip_file);
 	if( $res !== TRUE ) {
 		echo '<p><strong>Error:</strong> could not extract .zip file</p>';
-		exit;
+		return;
 	}
 	$zip->extractTo( $module_temp_folder );
 	$zip->close();
@@ -463,7 +463,7 @@ function install_module( $source, $target, $version ) {
 
 	if( ! $subfolder ) {
 		echo '<p><strong>Error:</strong> something went wrong with the .zip file</p>';
-		exit;
+		return;
 	}
 
 	echo '<p>Moving files to new location … ';
