@@ -1,5 +1,6 @@
 v.0.1.6
 
+- this module is now named 'homestead-installer' (was only 'homestead')
 - on install, set indieauth-metadata for eigenheim, instead of authorization_endpoint and token_endpoint
 
 
