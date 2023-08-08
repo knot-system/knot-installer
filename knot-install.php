@@ -322,7 +322,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	delete_directory($temp_folder);
 
-	unlink( $abspath.'<?= $self ?>' );
+	unlink( $abspath.$self );
 
 	echo '<p>all done.</p>';
 
