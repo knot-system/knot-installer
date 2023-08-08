@@ -1,6 +1,7 @@
 v.0.2.1
 
 - bugfix: remove knot-install.php after installation
+- moved repo to 'knot-system' organization on GitHub
 
 
 v.0.2.0

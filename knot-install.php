@@ -7,32 +7,32 @@ $sources = [
 	'knot-site' => [
 		'name' => 'Knot Site',
 		'target' => 'knot-site/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-site/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/knot-site/archive/refs/heads/main.zip',
+		'zipball_stable' => 'https://api.github.com/repos/knot-system/knot-site/releases',
+		'zipball_dev' => 'https://github.com/knot-system/knot-site/archive/refs/heads/main.zip',
 	],
 	'knot-home' => [
 		'name' => 'Knot Home',
 		'target' => 'knot-home/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-home/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/knot-home/archive/refs/heads/main.zip',
+		'zipball_stable' => 'https://api.github.com/repos/knot-system/knot-home/releases',
+		'zipball_dev' => 'https://github.com/knot-system/knot-home/archive/refs/heads/main.zip',
 	],
 	'knot-daemon' => [
 		'name' => 'Knot Daemon',
 		'target' => 'knot-daemon/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-daemon/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/knot-daemon/archive/refs/heads/main.zip',
+		'zipball_stable' => 'https://api.github.com/repos/knot-system/knot-daemon/releases',
+		'zipball_dev' => 'https://github.com/knot-system/knot-daemon/archive/refs/heads/main.zip',
 	],
 	'knot-auth' => [
 		'name' => 'Knot Auth',
 		'target' => 'knot-auth/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-auth/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/knot-auth/archive/refs/heads/main.zip',
+		'zipball_stable' => 'https://api.github.com/repos/knot-system/knot-auth/releases',
+		'zipball_dev' => 'https://github.com/knot-system/knot-auth/archive/refs/heads/main.zip',
 	],
 	'knot-control' => [
 		'name' => 'Knot Control',
 		'target' => 'knot-control/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-control/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/knot-control/archive/refs/heads/main.zip',
+		'zipball_stable' => 'https://api.github.com/repos/knot-system/knot-control/releases',
+		'zipball_dev' => 'https://github.com/knot-system/knot-control/archive/refs/heads/main.zip',
 	]
 ];
 
@@ -404,7 +404,7 @@ function install_module( $source, $target, $version ) {
 		}
 		$zipball = $latest_release->zipball_url;
 
-		$zip_folder_name_start = 'maxhaesslein-'.$source.'-';
+		$zip_folder_name_start = 'knot-system-'.$source.'-';
 
 		echo '<p>Installing latest stable release</p>';
 
