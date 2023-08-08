@@ -1,38 +1,38 @@
 <?php
 
-$installer_version = '0.1.6';
+$installer_version = '0.2.0';
 
 
 $sources = [
-	'eigenheim' => [
-		'name' => 'Eigenheim',
-		'target' => 'eigenheim/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/eigenheim/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/eigenheim/archive/refs/heads/main.zip',
+	'knot-site' => [
+		'name' => 'Knot Site',
+		'target' => 'knot-site/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-site/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/knot-site/archive/refs/heads/main.zip',
 	],
-	'sekretaer' => [
-		'name' => 'Sekretär',
-		'target' => 'sekretaer/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/sekretaer/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/sekretaer/archive/refs/heads/main.zip',
+	'knot-home' => [
+		'name' => 'Knot Home',
+		'target' => 'knot-home/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-home/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/knot-home/archive/refs/heads/main.zip',
 	],
-	'postamt' => [
-		'name' => 'Postamt',
-		'target' => 'postamt/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/postamt/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/postamt/archive/refs/heads/main.zip',
+	'knot-daemon' => [
+		'name' => 'Knot Daemon',
+		'target' => 'knot-daemon/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-daemon/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/knot-daemon/archive/refs/heads/main.zip',
 	],
-	'einwohnermeldeamt' => [
-		'name' => 'Einwohnermeldeamt',
-		'target' => 'einwohnermeldeamt/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/einwohnermeldeamt/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/einwohnermeldeamt/archive/refs/heads/main.zip',
+	'knot-auth' => [
+		'name' => 'Knot Auth',
+		'target' => 'knot-auth/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-auth/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/knot-auth/archive/refs/heads/main.zip',
 	],
-	'homestead-control' => [
-		'name' => 'Homestead Control',
-		'target' => 'homestead-control/',
-		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/homestead-control/releases',
-		'zipball_dev' => 'https://github.com/maxhaesslein/homestead-control/archive/refs/heads/main.zip',
+	'knot-control' => [
+		'name' => 'Knot Control',
+		'target' => 'knot-control/',
+		'zipball_stable' => 'https://api.github.com/repos/maxhaesslein/knot-control/releases',
+		'zipball_dev' => 'https://github.com/maxhaesslein/knot-control/archive/refs/heads/main.zip',
 	]
 ];
 
@@ -45,16 +45,13 @@ if( ! isset($_REQUEST['debug']) ) {
 
 $php_min_version_major = 8;
 
-$useragent = 'maxhaesslein/homestead-installer/'.$installer_version;
+$useragent = 'knot/installer/'.$installer_version;
 
 
 $local_phpversion = explode( '.', phpversion() );
 
 $self = basename(__FILE__);
-
 $abspath = realpath(dirname(__FILE__)).'/';
-$abspath = preg_replace( '/system\/$/', '', $abspath );
-
 $basefolder = str_replace( $self, '', $_SERVER['PHP_SELF']);
 
 if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ) $baseurl = 'https://';
@@ -91,7 +88,7 @@ foreach( $required_extensions as $required_extension ) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>🏡 Homestead Installer</title>
+	<title>🏡 Knot Installer</title>
 
 	<style>
 		fieldset {
@@ -113,7 +110,7 @@ foreach( $required_extensions as $required_extension ) {
 <body>
 <main style="max-width: 600px; margin: 0 auto">
 
-	<h1>🏡 Homestead Installer</h1>
+	<h1>🏡 Knot Installer</h1>
 
 <?php
 
@@ -122,7 +119,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	?>
 	<p><strong>Error:</strong> your PHP version is too old (you need at least <code>PHP <?php echo $php_min_version_major; ?></code>).</p>
 	<p>Please upgrade your PHP version to at least version <code><?php echo $php_min_version_major ?></code></p>
-	<p>Then <a href="homestead-install.php">refresh this page</a>.</p>
+	<p>Then <a href="<?= $self ?>">refresh this page</a>.</p>
 	<?php
 
 } elseif( count($missing_extensions) ) {
@@ -140,31 +137,32 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 		}
 		?>
 	</ul>
-	<p>Then <a href="homestead-install.php">refresh this page</a>.</p>
+	<p>Then <a href="<?= $self ?>">refresh this page</a>.</p>
 	<?php
 
 } elseif( $is_installed ) {
 
 	?>
-	<p>It looks like Homestead is already installed at this location!</p>
-	<p>Please delete the existing subfolders, then <a href="homestead-install.php">refresh this page</a>.</p>
+	<p>It looks like a Knot System is already installed at this location!</p>
+	<p>Please delete the existing subfolders, then <a href="<?= $self ?>">refresh this page</a>.</p>
 	<?php
 
 } elseif( ! isset($_POST['action'])
  || $_POST['action'] != 'install'
- || empty($_POST['eigenheim'])
- || empty($_POST['eigenheim']['author_name'])
- || empty($_POST['eigenheim']['site_title'])
+ || empty($_POST['knot-site'])
+ || empty($_POST['knot-site']['author_name'])
+ || empty($_POST['knot-site']['site_title'])
 ) {
 
 	?>
 
-	<p>This script will install all modules required for a full <strong>Homestead</strong> installation. These modules are:</p>
+	<p>This script will install all modules required for a full <strong>Knot System</strong> installation. These modules are:</p>
 	<ul>
-		<li><strong>Eigenheim</strong> as the website (and micropub server), that visitors will see</li>
-		<li><strong>Sekretär</strong> as the micropub & microsub client, where you can write new posts and read posts from websites you follow</li>
-		<li><strong>Postamt</strong> as the microsub server, that will manage the websites you follow and collect new posts they publish</li>
-		<li><strong>Einwohnermeldeamt</strong> as the IndieAuth server, that will authorize you via a password, when you want to log in</li>
+		<li><strong>Knot Site</strong> as the website (and micropub server), that visitors will see</li>
+		<li><strong>Knot Home</strong> as the micropub & microsub client, where you can write new posts and read posts from websites you follow</li>
+		<li><strong>Knot Daemon</strong> as the microsub server, that will manage the websites you follow and collect new posts they publish</li>
+		<li><strong>Knot Auth</strong> as the IndieAuth server, that will authorize you via a password, when you want to log in</li>
+		<li><strong>Knot Control</strong> as a configuration interface where you can change some config options and search for updates</li>
 	</ul>
 
 	<p>Your server should meet all the necessary requirements.</p>
@@ -181,10 +179,10 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 				<option value="dev">unstable dev release (not recommended)</option>
 			</select></label></p>
 
-			<p><label><strong>Site Title</strong><br><input type="text" name="eigenheim[site_title]" required><br><small>(the title of your website)</small></label></p>
-			<p><label><strong>Author Name</strong><br><input type="text" name="eigenheim[author_name]" required><br><small>(your name, displayed on your website)</small></label></p>
-			<p><label id="password-label"><strong>Password</strong><br><input type="text" class="password-field" name="einwohnermeldeamt[password]" minlength="8" required> <span class="password-toggle" style="display: none;"></span><br><small>(you use this password to log into the backend, where you can write new posts and read posts from pages you follow; the password needs to be at least 8 characters long)</small></label></p>
-			<p><label><input type="checkbox" name="eigenheim[testcontent]" value="true" checked> create Eigenheim test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
+			<p><label><strong>Site Title</strong><br><input type="text" name="knot-site[site_title]" required><br><small>(the title of your website)</small></label></p>
+			<p><label><strong>Author Name</strong><br><input type="text" name="knot-site[author_name]" required><br><small>(your name, displayed on your website)</small></label></p>
+			<p><label id="password-label"><strong>Password</strong><br><input type="text" class="password-field" name="knot-auth[password]" minlength="8" required> <span class="password-toggle" style="display: none;"></span><br><small>(you use this password to log into the backend, where you can write new posts and read posts from pages you follow; the password needs to be at least 8 characters long)</small></label></p>
+			<p><label><input type="checkbox" name="knot-site[testcontent]" value="true" checked> create Knot Site test content<br><small>(add some test content to your website, so you can check that everything works; this is optional)</small></label>
 
 			<script>
 			(function(){
@@ -247,7 +245,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 	if( ! $temp_folder ) {
 		?>
 		<p><strong>Error:</strong> could not create temporary <code>tmp/</code> folder. Please check the permissions of this directory.<br>The permission of the folder <em><?= $abspath ?></em> should be set to <code>644</code> (or <code>664</code>).</p>
-		<p>After changing the permission, <a href="homestead-install.php">refresh this page</a>.</p>
+		<p>After changing the permission, <a href="<?= $self ?>">refresh this page</a>.</p>
 		<?php
 		exit;
 	}
@@ -279,18 +277,18 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 		// automatically set some additional options:
 		$config['setup'] = true;
-		if( $source == 'eigenheim') {
+		if( $source == 'knot-site') {
 			$config['baseurl_overwrite'] = $baseurl;
 			$config['basefolder_overwrite'] = $basefolder;
-			$config['microsub'] = $baseurl.$sources['postamt']['target'];
-			$config['indieauth-metadata'] = $baseurl.$sources['einwohnermeldeamt']['target'].'metadata';
-		} elseif( $source == 'sekretaer' ) {
+			$config['microsub'] = $baseurl.$sources['knot-daemon']['target'];
+			$config['indieauth-metadata'] = $baseurl.$sources['knot-auth']['target'].'metadata';
+		} elseif( $source == 'knot-home' ) {
 			$config['authorized_urls'] = $baseurl;
 			$config['start'] = true;
-		} elseif( $source == 'postamt' ) {
+		} elseif( $source == 'knot-daemon' ) {
 			$config['authorized_urls'] = $baseurl;
 			$config['refresh_on_connect'] = 'true';
-		} elseif( $source == 'einwohnermeldeamt' ) {
+		} elseif( $source == 'knot-auth' ) {
 			$config['me'] = $baseurl;
 		}
 
@@ -316,7 +314,7 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	flush();
 
-	$content = "# BEGIN homestead\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$basefolder."\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule (.*) eigenheim/$1 [L,QSA]\r\nRewriteRule ^$ eigenheim/ [L,QSA]\r\n</IfModule>\r\n# END homestead";
+	$content = "# BEGIN knot\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$basefolder."\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule (.*) knot-site/$1 [L,QSA]\r\nRewriteRule ^$ knot-site/ [L,QSA]\r\n</IfModule>\r\n# END knot";
 	file_put_contents( $abspath.'.htaccess', $content );
 
 	echo '<h3>cleaning up</h3>';
@@ -324,18 +322,18 @@ if( $local_phpversion[0] < $php_min_version_major ) {
 
 	delete_directory($temp_folder);
 
-	unlink( $abspath.'homestead-install.php' );
+	unlink( $abspath.'<?= $self ?>' );
 
 	echo '<p>all done.</p>';
 
-	if( array_key_exists('eigenheim', $sources) ) {
-		echo '<p>&raquo; you can view your Eigenheim system at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.'</a> - this is your personal website.</p>';
+	if( array_key_exists('knot-site', $sources) ) {
+		echo '<p>&raquo; you can view your Knot Site at <a href="'.$baseurl.'" target="_blank" rel="noopener">'.$baseurl.'</a> - this is your personal website.</p>';
 	}
-	if( array_key_exists('sekretaer', $sources) ) {
-		echo '<p>&raquo; you can log in to Sekretär at <a href="'.$baseurl.$sources['sekretaer']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['sekretaer']['target'].'</a> to write new posts and read posts from other websites.</p>';
+	if( array_key_exists('knot-home', $sources) ) {
+		echo '<p>&raquo; you can log into Knot Home at <a href="'.$baseurl.$sources['knot-home']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['knot-home']['target'].'</a> to write new posts and read posts from other websites.</p>';
 	}
-	if( array_key_exists('homestead-control', $sources) ) {
-		echo '<p>&raquo; you can log in to the Homestead Control at <a href="'.$baseurl.$sources['homestead-control']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['homestead-control']['target'].'</a> to edit settings and update all modules.</p>';
+	if( array_key_exists('knot-control', $sources) ) {
+		echo '<p>&raquo; you can log into Knot Control at <a href="'.$baseurl.$sources['knot-control']['target'].'?login_url='.urlencode($baseurl).'" target="_blank" rel="noopener">'.$baseurl.$sources['knot-control']['target'].'</a> to edit settings and update all modules.</p>';
 	}
 
 	flush();
