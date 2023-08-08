@@ -1,6 +1,6 @@
 # Knot Installer
 
-This script installs and configures a full Knot System, consisting of the modules [Knot Site](https://github.com/knot-system/knot-site), [Knot Home](https://github.com/knot-system/knot-home), [Knot Daemon](https://github.com/knot-system/knot-daemon), [Knot Auth](https://github.com/knot-system/knot-auth) and [Knot Control](https://github.com/knot-system/knot-control)
+This script installs and configures a full [Knot System](https://github.com/knot-system), consisting of the modules [Knot Site](https://github.com/knot-system/knot-site), [Knot Home](https://github.com/knot-system/knot-home), [Knot Daemon](https://github.com/knot-system/knot-daemon), [Knot Auth](https://github.com/knot-system/knot-auth) and [Knot Control](https://github.com/knot-system/knot-control)
 
 **This is an early beta version!** Some things may break, or change in the future!
 
