@@ -1,6 +1,6 @@
 <?php
 
-$installer_version = '0.2.0';
+$installer_version = '0.2.1-pre';
 
 
 $sources = [
